@@ -1,0 +1,27 @@
+.option {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 30px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgb(0, 0, 0);
+    position: relative;
+    box-sizing: border-box;
+  }
+  
+  .checkIcon {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    margin-top: -12px;
+  }
+
+  .option[data-selected="true"],
+  .option:hover {
+    background-color: rgb(61, 133, 209);
+    color: #fff;
+  }
+
+

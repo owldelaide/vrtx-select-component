@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "ESNext",
+        "target": "es6",
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
+        "types": [
+            "vite-plugin-svgr/client"
+        ]
+    },
+    // "ts-node": {
+    //     "compilerOptions": {
+    //         "module": "CommonJS"
+    //     }
+    // },
+    // "include": [
+    //     "./src/**/*.tsx",
+    //     "./src/**/*.ts",
+    // ],
+}
