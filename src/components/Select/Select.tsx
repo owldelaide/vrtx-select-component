@@ -5,6 +5,7 @@ import { Option } from "./Option";
 import styles from './Select.module.css';
 
 type SelectProps = {
+    fieldName: string;
     selected: string;
     options: string[];
     label: string;
@@ -15,6 +16,7 @@ type SelectProps = {
 
 const Select = (props: SelectProps) => {
     const {
+        fieldName,
         label,
         options,
         placeholder,
@@ -86,8 +88,11 @@ const Select = (props: SelectProps) => {
     };
 
     return (
-        <div ref={rootRef}>
-            <label htmlFor='optionInput'>
+        <div
+            ref={rootRef}
+            className={styles.wrapper}
+        >
+            <label htmlFor={fieldName}>
                 {label}
                 <div
                     className={styles.placeholder}
@@ -95,7 +100,7 @@ const Select = (props: SelectProps) => {
                     id={'placeholder'}
                 >
                     <input
-                        id={'optionInput'}
+                        id={fieldName}
                         className={styles.input}
                         placeholder={placeholder}
                         value={value}
