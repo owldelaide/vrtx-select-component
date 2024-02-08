@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Select from "./components/Select/Select";
 import styles from './App.module.css';
+import Select from "./components/Select/Select";
 
 let options: string[] = [
     'options1_group_1',
@@ -22,45 +22,39 @@ let options3: string[] = [
 
 const parentStyle = {
     width: '500px',
-}
+};
+
+const initialState = {
+    group: '',
+    group2: '',
+    group3: ''
+};
 
 const App = () => {
-    const [group, setGroup] = useState('');
-    const [group2, setGroup2] = useState('');
-    const [group3, setGroup3] = useState('');
+    const [state, setState] = useState(initialState);
 
-    const handleGroupSelect = (value: string) => {
-        setGroup(value);
+    // новые обработчики
+    const addOption = (options: string[], value: string) => {
         if (options.indexOf(value) === -1) // если нет такого элемента в массиве, добавляем
             options.push(value);
     };
 
-    const handleDelete = () => {
-        setGroup('');
-        options = options.filter(item => item !== group);
+    const deleteOption = (options: string[], value: string) => {
+        let index = options.findIndex(item => item === value)
+        options.splice(index, 1);
     };
 
-    const handleGroupSelect2 = (value: string) => {
-        setGroup2(value);
-        if (options2.indexOf(value) === -1)
-            options2.push(value);
-    };
+    // старые обработчики
+    // const handleGroupSelect = (value: string) => {
+    //     setGroup(value);
+    //     if (options.indexOf(value) === -1) // если нет такого элемента в массиве, добавляем
+    //         options.push(value);
+    // };
 
-    const handleDelete2 = () => {
-        setGroup2('');
-        options2 = options2.filter(item => item !== group2);
-    };
-
-    const handleGroupSelect3 = (value: string) => {
-        setGroup3(value);
-        if (options3.indexOf(value) === -1)
-            options3.push(value);
-    };
-
-    const handleDelete3 = () => {
-        setGroup3('');
-        options3 = options3.filter(item => item !== group3);
-    };
+    // const handleDelete = () => {
+    //     setGroup('');
+    //     options = options.filter(item => item !== group);
+    // };
 
     return (
         <div
@@ -70,27 +64,27 @@ const App = () => {
             <Select
                 fieldName={'select'}
                 options={options}
-                selected={group}
-                onChange={handleGroupSelect}
-                onOptionDelete={handleDelete}
+                selected={state.group}
+                onChange={value => { setState({ ...state, group: value }), addOption(options, value) }}
+                onOptionDelete={() => { setState({ ...state, group: '' }), deleteOption(options, state.group) }}
                 label={'Группа обработки'}
                 placeholder={'Укажите название'}
             />
             <Select
                 fieldName={'select2'}
                 options={options2}
-                selected={group2}
-                onChange={handleGroupSelect2}
-                onOptionDelete={handleDelete2}
+                selected={state.group2}
+                onChange={value => { setState({ ...state, group2: value }), addOption(options2, value) }}
+                onOptionDelete={() => { setState({ ...state, group2: '' }), deleteOption(options2, state.group2) }}
                 label={'Группа обработки 2'}
                 placeholder={'Укажите название'}
             />
             <Select
                 fieldName={'select3'}
                 options={options3}
-                selected={group3}
-                onChange={handleGroupSelect3}
-                onOptionDelete={handleDelete3}
+                selected={state.group3}
+                onChange={value => { setState({ ...state, group3: value }), addOption(options3, value) }}
+                onOptionDelete={() => { setState({ ...state, group3: '' }), deleteOption(options3, state.group3) }}
                 label={'Группа обработки 3'}
                 placeholder={'Укажите название'}
             />
