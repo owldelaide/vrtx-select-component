@@ -5,27 +5,18 @@ import { Option } from "./Option";
 import styles from './Select.module.css';
 
 type SelectProps = {
-    fieldName: string;
-    selected: string;
     options: string[];
     label: string;
-    placeholder?: string;
-    onChange: (selected: string) => void;
-    onOptionDelete: () => void;
 };
 
 const Select = (props: SelectProps) => {
     const {
-        fieldName,
         label,
         options,
-        placeholder,
-        selected,
-        onChange,
-        onOptionDelete
     } = props;
     const [isOpen, setIsOpen] = useState(false); // состояние списка
-    const [value, setValue] = useState(selected); // значение в инпуте
+    const [value, setValue] = useState(''); // значение в инпуте
+    const [optionsList, setOptionsList] = useState(options); // локальная копия массива опций для манипуляций
     const rootRef = useRef<HTMLDivElement>(null); // ссылка на корневой див
 
     useEffect(() => {
@@ -61,30 +52,34 @@ const Select = (props: SelectProps) => {
 
     const handleChangeOption = (selected: string) => {
         setValue(selected);
-        onChange(selected);
+    };
+
+    const addOption = (selected: string) => {
+        if (optionsList.indexOf(selected) === -1) // если нет такого элемента в массиве, добавляем
+            setOptionsList([...optionsList, selected]);
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         switch (e.key) {
             case 'Enter':
                 if (value !== '') {
-                    onChange(value); // если при нажатии на Enter непустое значение, отправляем его родителю
+                    setValue(value);
+                    addOption(value); // если при нажатии на Enter непустое значение, пробуем добавить в массив
                 }
                 else if (!isOpen) {
                     setIsOpen(true);
                 }
                 break;
             case 'Delete':
-                options.length > 1 && onOptionDelete(); // удаление опции по нажатию на Del
-                setValue('');
+                optionsList.length > 1 && handleDeleteOption(); // удаление опции по нажатию на Del
                 break;
             default: break;
         }
     };
 
     const handleDeleteOption = () => {
+        setOptionsList(optionsList.filter(item => item !== value));
         setValue('');
-        onOptionDelete();
     };
 
     return (
@@ -92,7 +87,7 @@ const Select = (props: SelectProps) => {
             ref={rootRef}
             className={styles.wrapper}
         >
-            <label htmlFor={fieldName}>
+            <label>
                 {label}
                 <div
                     className={styles.placeholder}
@@ -100,39 +95,38 @@ const Select = (props: SelectProps) => {
                     id={'placeholder'}
                 >
                     <input
-                        id={fieldName}
                         className={styles.input}
-                        placeholder={placeholder}
+                        placeholder={'Укажите название'}
                         value={value}
                         onChange={handleChangeInput}
-                        onKeyUp={handleKeyPress}
+                        onKeyDown={handleKeyPress}
                     />
                     <div
                         className={styles.trash}
-                        data-trash={!selected || options.length <= 1}
+                        data-trash={!value || optionsList.length <= 1}
                         onClick={handleDeleteOption}
                     >
                         <Trash />
                     </div>
                     <div
                         className={styles.arrow}
-                        data-visibility={!!options.length}
+                        data-visibility={!!optionsList.length}
                         onClick={handlePlaceholderClick}
                     >
                         <Arrow />
                     </div>
                 </div>
-                {(isOpen && !!options.length) && (
+                {(isOpen && !!optionsList.length) && (
                     <ul
                         id={'optionsList'}
                         className={styles.optionsList}
                     >
-                        {options.map((option) => (
+                        {optionsList.map((option) => (
                             <Option
                                 key={option}
                                 option={option}
                                 onOptionClick={handleChangeOption}
-                                selected={option === selected}
+                                selected={option === value}
                             />
                         ))}
                     </ul>
